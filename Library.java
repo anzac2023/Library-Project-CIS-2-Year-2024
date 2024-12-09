@@ -9,10 +9,21 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * A library management class. Has a simple shell that users can interact with
- * to add/remove/checkout/list books in the library. Also allows saving the
- * library state to a file and reloading it from the file.
- */
+* The Library Management Project is a complex circuit composed of different data structures and
+* methods that allow the user to search and add books in the database. The two data structures we
+* used to add and search for books include the Binary Search Tree and the Unordered Linked List. 
+* When the user inputs certain information such as the book's author, title and ISBN number through 
+* the addBook method. The program verifies if the book exists in the database and if it does, add’s to the number 
+* of copies already held by the library. If the library has 0 copies, the program add’s the new appropriate number.
+* The checkout method is used to stabilize this process. By first calling for the Binary Search Tree to search for
+* the desired book. The program verifies how many available copies are left and deducts a copy for the checkout. 
+* If no available copies are found by the BST, an appropriate message is outputted to indicate the user of it. 
+* If a user decides to return the book. The use of the return method allows the user to search by the use of an ISBN, 
+* title of book or author's name to match the book to the library's catalog, and successfully return it. 
+* Increasing the number of available copies as per the user’s quantity.
+* The use of the Binary Search Tree and Unordered Linked List allow the user to search and add books to the library’s 
+* catalog/database. While the use of the methods allow the user to checkout and return books.
+*/
 public class Library {
 
     private BST bst = new BST();
