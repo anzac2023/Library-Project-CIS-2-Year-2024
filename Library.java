@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * A library management class. Has a simple shell that users can interact with
@@ -259,10 +260,11 @@ public class Library {
         if (filename == null || filename.isEmpty()) {
             throw new IllegalArgumentException("Filename cannot be null or empty.");
         }
-        java.io.File outputFile = new java.io.File(filename); // Create the file object
-        java.io.PrintWriter writer = null; // Initialize the writer outside try-catch
-        try {
-            writer = new java.io.PrintWriter(outputFile); // Create the PrintWriter
+        //java.io.File outputFile = new java.io.File(filename); // Create the file object
+        //java.io.PrintWriter writer = null; // Initialize the writer outside try-catch
+        // Edited @Anzac Houchen to get save method to work
+        try (PrintWriter writer = new PrintWriter(new File(filename))){
+            //writer = new java.io.PrintWriter(outputFile); // Create the PrintWriter
             // Iterate through the library's linked list
             // Access the head of the linked list
             UnorderedLinkedList<Book>.Node<Book> current = BookList.getHead();
@@ -280,13 +282,16 @@ public class Library {
                 current = current.next;
             }
             System.out.println("Library saved successfully to " + filename);
-        } catch (java.io.FileNotFoundException e) {
-            throw new RuntimeException("An error occurred while saving the library to file: " + filename, e);
-        } finally {
-            // Ensure the writer is closed to free resources
-            if (writer != null) {
-                writer.close();
-            }
+        } catch (FileNotFoundException ex) {
+            System.err.println("Error: File not found - " +
+            ex.getMessage());
+        } 
+        catch (Exception ex) {
+            System.err.println("Unexpected error occured: " + 
+            ex.getMessage());
+            ex.printStackTrace();
+            //System.out.println(ex.printStackTrace());
+            System.out.println("Test 1.");
         }
     }
 
@@ -488,19 +493,10 @@ public class Library {
                         "Please provide valid filename.");
                     }
                     else {             
-                        try (ObjectOutputStream oos = new 
-                            ObjectOutputStream(new FileOutputStream(filename))) {
-                            oos.writeObject(library);
+                        try {
+                            library.save(filename);
                             System.out.println("Library data saved to " + filename);
                         } 
-                        catch (FileNotFoundException ex) {
-                            System.err.println("Error: File not found - " + 
-                            ex.getMessage());
-                        }
-                        catch (IOException ex) {
-                            System.err.println("Error saving file: " + 
-                            ex.getMessage());
-                        }
                         catch (Exception ex) {
                             System.err.println("Unexpected error occured: " + ex.getMessage());
                         }
